@@ -2,7 +2,6 @@ export class Block {
     constructor(x, y) {
         this.x = parseInt(x);
         this.y = parseInt(y);
-        // this.
         this.textColor = '#000';
         this.textSize = '36px';
         this.exponent = Math.random() * 10 >= 2.5 ? 1 : 2;
