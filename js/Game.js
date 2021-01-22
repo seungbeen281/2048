@@ -52,7 +52,9 @@ export class Game {
                     for (let y = 0; y < this.blockArr[x].length; y++) {
                         const block = this.blockArr[x][y];
                         if (!!block) {
+                            const tmp = {x: block.x, y: block.y};
                             const isChange = block.move('left', this.blockArr);
+                            block.setMoveDirection(tmp);
                             if (isChange) isMove = true;
                             else this.blockArr = block.mapArr;
                         }
@@ -65,7 +67,9 @@ export class Game {
                     for (let y = 0; y < this.blockArr[x].length; y++) {
                         const block = this.blockArr[x][y];
                         if (!!block) {
+                            const tmp = {x: block.x, y: block.y};
                             const isChange = block.move('top', this.blockArr);
+                            block.setMoveDirection(tmp);
                             if (isChange) isMove = true;
                             else this.blockArr = block.mapArr;
                         }
@@ -78,7 +82,9 @@ export class Game {
                     for (let y = 0; y < this.blockArr[x].length; y++) {
                         const block = this.blockArr[x][y];
                         if (!!block) {
+                            const tmp = {x: block.x, y: block.y};
                             const isChange = block.move('right', this.blockArr);
+                            block.setMoveDirection(tmp);
                             if (isChange) isMove = true;
                             else this.blockArr = block.mapArr;
                         }
@@ -91,7 +97,9 @@ export class Game {
                     for (let y = this.blockArr[x].length - 1; y >= 0; y--) {
                         const block = this.blockArr[x][y];
                         if (!!block) {
+                            const tmp = {x: block.x, y: block.y};
                             const isChange = block.move('bottom', this.blockArr);
+                            block.setMoveDirection(tmp);
                             if (isChange) isMove = true;
                             else this.blockArr = block.mapArr;
                         }
@@ -145,8 +153,9 @@ export class Game {
         }
 
         const location = emptyList[Math.floor(Math.random() * emptyList.length)].split("@");
-        this.blockArr[location[0]][location[1]] = new Block(location[0], location[1]);
-        this.score += this.blockArr[location[0]][location[1]].number;
+        const newBlock = new Block(location[0], location[1], this.canvas, this.grid, this.utilityWidth);
+        this.score += newBlock.number;
+        this.blockArr[location[0]][location[1]] = newBlock;
 
         if (this.inspectionOver()) {
             this.gameOver();
@@ -184,7 +193,11 @@ export class Game {
 
         this.blockArr.map(x => {
             x.map(block => {
-                if (!!block) block.draw(this.canvas, this.ctx, this.grid, this.utilityWidth);
+                if (!!block){
+                    block.show();
+                    block.motion();
+                    block.draw(this.canvas, this.ctx, this.grid, this.utilityWidth);
+                }
             })
         })
         this.drawScore();
